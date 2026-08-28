@@ -1,0 +1,12 @@
+{
+  "slug": "note-rehearsal-router",
+  "title": "Note Rehearsal Router",
+  "territory": "utilities",
+  "user": "A self-learner with a markdown note graveyard who wants a saved idea to become one concrete recall, solve, or explain action.",
+  "smallest_useful_product": "Browser extension plus local markdown folder watcher: present one untriaged note at a time and create exactly one local recall, solve, teach, do, or archive ticket.",
+  "non_goals": ["semantic search", "autonomous task creation", "cloud sync", "LLM summaries"],
+  "success_measure": "For users importing 30+ notes, 30% convert at least ten notes into completed rehearsal actions within 14 days.",
+  "artifact_class": "browser-extension",
+  "monetization": "one-time",
+  "constraints": "Filesystem permission and data stay local; markdown parsing is non-destructive; clear uninstall/export; no page-reading permissions."
+}
