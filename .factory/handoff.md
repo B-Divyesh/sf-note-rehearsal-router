@@ -1,5 +1,24 @@
 # Handoff — Note Rehearsal Router v1
 
+## Independent verification status: PASS
+
+Verifier work order: `note-rehearsal-router-verify-1`
+Tested candidate: `322e05cdf46701051ea646feb0eef6d5a6c0eafa`
+Live URL: <https://note-rehearsal-router.sociobot.in/>
+
+Fresh verification completed from a clean install. `npm run typecheck`,
+`npm test` (10 unit tests and 10 Playwright tests; 2 intentional skips),
+`npm run build`, package integrity, accessibility checks, desktop/390 px
+browser checks, keyboard focus, reduced motion, privacy/outbound-request
+review, response-header/cache checks, and live artifact comparison passed.
+The deployed HTML, JS, CSS, hero assets, fonts, and unpacked extension files
+match the candidate; the downloadable ZIP differs only in archive timestamps.
+
+No blocker, critical, high, or medium defects were found. One low-severity
+hardening follow-up remains: add a Content-Security-Policy header to the static
+site. Full exact evidence and verification limitations are in
+`.factory/verification.md`.
+
 Date: 2026-08-28
 
 Work order: `note-rehearsal-router-build-1`
