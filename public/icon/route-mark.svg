@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Five routes leaving one note">
+  <rect width="128" height="128" rx="26" fill="#111516"/>
+  <path d="M18 22h38v66H18z" fill="#f4f0e6"/>
+  <circle cx="66" cy="66" r="10" fill="#ff6b4a"/>
+  <path d="M74 59 103 27M76 64h37M74 71l29 30M66 76v37M58 72l-22 32" fill="none" stroke="#f4f0e6" stroke-width="8" stroke-linecap="square"/>
+  <path d="m103 27 8-8M113 64h10M103 101l8 8M66 113v10M36 104l-6 10" fill="none" stroke="#ff6b4a" stroke-width="8"/>
+</svg>

@@ -7,10 +7,11 @@
     "dev": "wxt",
     "dev:site": "vite --config site/vite.config.ts",
     "build:extension": "wxt build",
-    "build:site": "vite build --config site/vite.config.ts",
+    "build:site": "npm run build:extension && vite build --config site/vite.config.ts && npm run package:extension",
     "package:extension": "node scripts/package-extension.mjs",
-    "build": "npm run build:extension && npm run build:site && npm run package:extension",
-    "test": "vitest run",
+    "build": "npm run build:site",
+    "test": "vitest run && npm run build && playwright test",
+    "test:unit": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm test && npm run build"
@@ -21,12 +22,17 @@
   },
   "devDependencies": {
     "@types/chrome": "0.1.4",
+    "@types/node": "22.18.0",
+    "@types/wicg-file-system-access": "2023.10.6",
     "fflate": "0.8.2",
     "jsdom": "26.1.0",
     "sharp-cli": "^6.0.0",
     "typescript": "5.9.2",
-    "vite": "7.1.3",
-    "vitest": "3.2.4",
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.58.2",
+    "playwright-core": "1.58.2",
+    "vite": "7.3.6",
+    "vitest": "3.2.7",
     "wxt": "0.21.4"
   }
 }
