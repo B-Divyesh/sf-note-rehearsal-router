@@ -1,6 +1,27 @@
 # Handoff — Note Rehearsal Router v1
 
-## Independent verification status: PASS
+## Review 1 status: FAIL
+
+Reviewer work order: `note-rehearsal-router-review-1`
+Review date: 2026-09-05
+Implementation candidate: `27faed6ab37db8ab3e28cacd83bb7934b3b9590c`
+Documentation candidate reviewed: `88e200b6b93568e900dfa7faad90f5e67fa95473`
+
+Strict review found 10 findings and 20 untested public claim groups. The main
+release blockers are the missing one-click isolated sample, absent claims
+registry and tagged claim tests, and the live US $19 checkout URL returning
+HTTP 404. The required 404 page is also absent. Plain-word copy, metadata/page
+structure, text resize and target sizes, CSP, one build dependency, and reset
+announcement behavior need correction.
+
+Clean `npm ci`, `npm run typecheck`, `npm test`, and `npm run build` completed.
+The live extracted extension matches the candidate and its core routing logic
+worked with a disposable injected folder. Lighthouse mobile scored 100 in all
+four categories. These passing checks do not override the failed contract
+checks. Full evidence and exact remediation targets are in
+`.factory/review-1.md`.
+
+## Prior independent verification status (2026-08-28): PASS under the earlier contract
 
 Verifier work order: `note-rehearsal-router-verify-1`
 Tested candidate: `322e05cdf46701051ea646feb0eef6d5a6c0eafa`
