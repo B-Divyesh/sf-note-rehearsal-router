@@ -10,6 +10,14 @@ Implementation and deployed SHA: `39050d351fb25a30a17fe5088944f1af50b5cb22`
 
 Live URL: <https://note-rehearsal-router.sociobot.in/>
 
+## Verification 2 update — 2026-09-06
+
+The independent verification of implementation `39050d351fb25a30a17fe5088944f1af50b5cb22` and documentation `872959f3e89013aff20eaf37f30ceb98d81f2586` is **FAIL** with one high-severity live finding. All local product checks, 20 declared claim commands, demo checks, installed-extension checks, accessibility checks, and deployed static-route checks passed.
+
+The outstanding issue is the previously named external billing dependency: `https://api.sociobot.in/api/v1/products/note-rehearsal-router/checkout` currently returns HTTP 404. This makes the advertised US $19 purchase unusable and means the checkout portion of the public claim has not been observably tested. The product code and required offer metadata remain ready; the billing operator must enable/register the production offer, after which checkout and return-token flow need a fresh verification.
+
+See `.factory/verification-2.md` for the complete independent evidence and disposition of all earlier findings. This update supersedes the prior handoff's positive repair outcome for release acceptance; do not declare a product PASS until V2-1 is closed.
+
 ## Outcome
 
 The product-owned repair is complete and deployed. The extension still performs the original local Markdown routing job. The landing now states the job, audience, first action, privacy, free limit, and price before scrolling on desktop and a 390 px phone.
