@@ -1,88 +1,91 @@
-# Handoff — Note Rehearsal Router v1
+# Handoff — Note Rehearsal Router repair 1
 
-## Review 1 status: FAIL
+Date: 2026-09-06
 
-Reviewer work order: `note-rehearsal-router-review-1`
-Review date: 2026-09-05
-Implementation candidate: `27faed6ab37db8ab3e28cacd83bb7934b3b9590c`
-Documentation candidate reviewed: `88e200b6b93568e900dfa7faad90f5e67fa95473`
+Work order: `note-rehearsal-router-repair-1`
 
-Strict review found 10 findings and 20 untested public claim groups. The main
-release blockers are the missing one-click isolated sample, absent claims
-registry and tagged claim tests, and the live US $19 checkout URL returning
-HTTP 404. The required 404 page is also absent. Plain-word copy, metadata/page
-structure, text resize and target sizes, CSP, one build dependency, and reset
-announcement behavior need correction.
+Version: 1.1.0
 
-Clean `npm ci`, `npm run typecheck`, `npm test`, and `npm run build` completed.
-The live extracted extension matches the candidate and its core routing logic
-worked with a disposable injected folder. Lighthouse mobile scored 100 in all
-four categories. These passing checks do not override the failed contract
-checks. Full evidence and exact remediation targets are in
-`.factory/review-1.md`.
+Implementation and deployed SHA: `39050d351fb25a30a17fe5088944f1af50b5cb22`
 
-## Prior independent verification status (2026-08-28): PASS under the earlier contract
-
-Verifier work order: `note-rehearsal-router-verify-1`
-Tested candidate: `322e05cdf46701051ea646feb0eef6d5a6c0eafa`
 Live URL: <https://note-rehearsal-router.sociobot.in/>
 
-Fresh verification completed from a clean install. `npm run typecheck`,
-`npm test` (10 unit tests and 10 Playwright tests; 2 intentional skips),
-`npm run build`, package integrity, accessibility checks, desktop/390 px
-browser checks, keyboard focus, reduced motion, privacy/outbound-request
-review, response-header/cache checks, and live artifact comparison passed.
-The deployed HTML, JS, CSS, hero assets, fonts, and unpacked extension files
-match the candidate; the downloadable ZIP differs only in archive timestamps.
+## Outcome
 
-No blocker, critical, high, or medium defects were found. One low-severity
-hardening follow-up remains: add a Content-Security-Policy header to the static
-site. Full exact evidence and verification limitations are in
-`.factory/verification.md`.
+The product-owned repair is complete and deployed. The extension still performs the original local Markdown routing job. The landing now states the job, audience, first action, privacy, free limit, and price before scrolling on desktop and a 390 px phone.
 
-Date: 2026-08-28
+The only remaining release dependency is outside this repository: the Sociobot billing operator must register or enable the advertised one-time offer. The live checkout endpoint still returns HTTP 404 with `enabled factory product`. License verification is reachable and returns a structured invalid verdict for a bad token. The product retains the US $19 paid deliverables, the exact production checkout link, license storage and verification, restore, revocation handling, and legal terms. Public registration metadata is in `/work/.evidence/billing-offer.json`; it contains no credential.
 
-Work order: `note-rehearsal-router-build-1`
+## Repair disposition
 
-Artifact: WXT + TypeScript Chrome MV3 extension, with a Vite static product site
+1. **One-click demo — fixed.** `/demo/` starts with four realistic notes and a populated ledger. The persistent banner says “Demo — sample data, nothing is saved” and provides Reset demo and Start for real. State uses only `demo:note-rehearsal-router:state`; reset and exit leave a seeded non-demo key unchanged.
+2. **Checkout 404 — product side complete; external registration pending.** The exact slug-based checkout and US $19 one-time offer remain public. Valid, revoked, cached, paste-to-restore, and return-token flows have outcome tests. Registration metadata was supplied for the separate billing operator.
+3. **Claims — fixed.** `.factory/claims.json` lists 20 public claim groups. Each ID appears in exactly one tagged outcome test, and every declared command passed independently from a fresh clone.
+4. **404 — fixed.** Unknown live paths return HTTP 404 with the designed product page, one h1, route-specific title, navigation, and standard footer.
+5. **Copy — fixed.** The h1 names the job. Audience and first action are explicit. Mood headings and metaphors were removed. `.factory/copy-audit.md` records every landing sentence and confirms the 22-word and banned-word checks.
+6. **Metadata and structure — fixed.** Home, demo, privacy, terms, and 404 have distinct titles, one h1, standard landmarks, consistent navigation/footer, canonical and social metadata, a 1200×630 original social card, and an Apple touch icon. Sitemap and robots include the public routes.
+7. **Accessibility and resize — fixed.** Site and extension text is at least 16 px, controls are at least 44 px, focus is visible, the settings dialog traps and restores focus, reduced motion is respected, and 200% text fits at phone width. Live axe found no violations on every public route, including 404.
+8. **CSP — fixed.** A response-header CSP limits scripts, styles, images, fonts, forms, and connections; `frame-ancestors` is header-only. The live browser produced no CSP or console errors.
+9. **Dependency finding — fixed.** `fflate` is 0.8.3 and `npm audit` reports zero vulnerabilities.
+10. **Reset announcement — fixed.** Forget local data announces that browser data was cleared and disk tickets were not changed. Its test verifies extension storage and the folder handle are removed while an existing ticket remains.
 
-## What shipped
+The earlier low-severity CSP hardening item in `.factory/verification.md` is also closed. The working routing, file-write, undo, export, free-limit, offline, keyboard, and license behavior from earlier verification remains covered.
 
-- A full-tab extension desk opened from the toolbar action. It recursively scans a user-selected local directory for Markdown, presents one unrouted note, and creates exactly one separate `recall`, `solve`, `teach`, `do`, or `archive` Markdown ticket under `.rehearsal/`.
-- Source Markdown is read-only. A route is added to the local ledger only after the ticket write succeeds; failed writes leave the note available. Duplicate filenames receive a numeric suffix.
-- Folder handles persist in IndexedDB, while the versioned route ledger and preferences use `chrome.storage.local`. Permission-expired, empty-folder, completed-queue, free-limit, loading, scan/write error, and offline-license states have recovery actions.
-- Keyboard routes `1`–`5`, `R` to rescan, `E` to export, visible focus, live announcements, reversible last-route deletion, and a 390 px layout.
-- Folder monitoring is browser-safe: scan on open, manual rescan, and automatic rescan when the desk regains focus after editing elsewhere. No unstable filesystem observer or background page access is used.
-- Free tier: 30 routed notes, local ticket writing, undo, and Markdown ledger export. US $19 one-time unlock: unlimited routing and a custom ticket-folder name. Checkout/verification uses the Sociobot API with no hard-coded product ID, cached daily verification, offline optimistic behavior for a previously valid license, return-token capture, and paste-to-restore.
-- Static landing page with the original routing-field visual system, direct packaged ZIP download, responsive AVIF/WebP/JPEG hero, product explanation, install steps, purchase flow, `/privacy/`, `/terms/`, `robots.txt`, `sitemap.xml`, and static-host caching/security headers.
-- Original generated hero plus hand-authored route icon. Prompt, model route, date, review, and license provenance are recorded in `.factory/design.md` and `assets/src/routing-field*.json`.
+## What changed
 
-## Build outputs
+- Added the isolated sample application, shared realistic fixtures, reset/exit behavior, keyboard routes, undo, ledger export, and `.factory/demo.md`.
+- Added a 20-entry claims registry and outcome coverage for normal, invalid, boundary, privacy, offline, and recovery paths.
+- Added installed-extension end-to-end coverage using a browser-owned disposable directory. It scans a sample Markdown file, routes it through the real UI, writes one `.rehearsal` ticket, and proves the source bytes are unchanged.
+- Added unit coverage for empty and oversized notes, duplicate ticket names, failed writes, license capture, invalid verdicts, and cached offline verification.
+- Reworked the landing and legal pages to the required site skeleton and plain language while preserving the routing-field visual identity.
+- Added the designed 404, security headers, route metadata, social image, touch icon, and long-lived asset caching.
+- Improved the extension settings dialog, invalid-license notice, reset status, text size, touch targets, and installed onboarding link to the demo.
+- Updated the extension/package version and packaged ZIP to 1.1.0.
 
-Run `npm run build` or `npm run build:site` from a clean install. Both create the complete release:
+## Clean verification
 
-- Static deploy root: `dist/site/` (contains root `index.html`)
-- Extension: `dist/extension/chrome-mv3/`
-- Linked archive: `dist/site/downloads/note-rehearsal-router.zip` (104 KB in this build)
+A fresh local clone of the implementation SHA was used, not the working checkout.
 
-## Verification
-
+- `npm ci` — pass; 231 packages installed; 0 vulnerabilities.
 - `npm run typecheck` — pass.
-- `npm test` — pass: 10 Vitest domain/filesystem tests; production build; 10 Playwright desktop/mobile/extension tests passed with 2 intentional cross-project skips.
-- Playwright launches the built MV3 extension in Chromium and checks title, single h1, onboarding, 390 px overflow, console errors, and axe serious/critical violations.
-- Landing/site Playwright coverage checks desktop and mobile layouts, download path, license-return storage and URL stripping, legal routes, semantic landmarks, and axe serious/critical violations.
-- `npm audit` — 0 vulnerabilities.
-- Bundle budgets: extension initial JS 20.76 KB; extension CSS 11.23 KB; two Latin variable fonts 86.05 KB total. Landing mobile transfer measured by Lighthouse: 112 KiB. Hero variants are 19–54 KB.
-- Lighthouse 12.8.2, mobile preset, local production preview: Performance **99**, Accessibility **100**, Best Practices **100**, SEO **100**; FCP 1.4 s, LCP 1.7 s, CLS 0.015, TBT 0 ms, Speed Index 1.4 s.
-- Manual visual review completed at 1280 px and 390 px. Generated art has no pseudo-text, people, brands, watermarks, or broken route geometry.
+- `npm test` — pass: 16 unit tests; production build; 42 browser tests passed with 22 intentional desktop/mobile or extension project skips.
+- `npm run build` — pass; produced `dist/site/`, `dist/extension/chrome-mv3/`, and `dist/site/downloads/note-rehearsal-router.zip`.
+- Every one of the 20 commands in `.factory/claims.json` — pass independently. Output: `/work/.evidence/claims-all.log`.
+- Local Lighthouse mobile — 99 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.7 s, CLS 0, TBT 0 ms.
 
-## Privacy and uninstall
+Build sizes remain inside the contract: extension JS 21.55 KB, CSS 11.50 KB, two self-hosted fonts 86.05 KB total, and the complete unpacked extension 127.65 KB. Landing JS is 1.17 KB and demo JS is 7.58 KB before gzip.
 
-The manifest requests only `storage`; it has no content scripts or page-reading/host permissions. Notes, paths, and route history are not transmitted. Only a license token reaches the billing verification endpoint. “Forget local data” clears browser-held folder/ledger data without deleting disk tickets; uninstalling clears extension storage. Export remains available in the free tier.
+## Cold live verification
 
-## Known gaps / release steps
+- Product-scoped deployment to existing `sf-note-rehearsal-router` completed without DNS, shared infrastructure, or replica changes.
+- `/`, `/demo/`, `/privacy/`, `/terms/`, extension ZIP, `robots.txt`, and `sitemap.xml` return 200.
+- A random unknown route returns HTTP 404 and the designed 404 document.
+- The factory `verify-url.sh` reports title, `lang=en`, one h1, main landmark, complete alt text, no unlabeled buttons, and no console errors. Evidence: `/work/.evidence/verify-live/`.
+- Fresh desktop and phone contexts confirmed the first-screen copy, one-click demo entry, populated output, persistent banner, route result, reset, exit, zero horizontal overflow, and no real-data mutation. Evidence: `/work/.evidence/live-browser-audit.json` and `live-demo-*.png`.
+- Live axe: zero violations on home, demo, privacy, terms, and 404. Evidence: `/work/.evidence/live-axe.json`.
+- Live Lighthouse mobile — 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.4 s, CLS 0, TBT 0 ms. Evidence: `/work/.evidence/lighthouse-live.json`.
+- Invalid live license return strips the token from the URL, stores it under the product key, opens the dialog, and gives a recovery message without console errors. Evidence: `/work/.evidence/live-license-recovery.json`.
+- Live checkout was retested after deployment and remains the named external 404 dependency. Evidence: `/work/.evidence/live-checkout-body.json`.
 
-- The factory still needs to register the production paid product/return URL and publish the extension. The code intentionally uses the slug-based production API contract and contains no generated product ID.
-- The downloadable ZIP is for Chrome’s “Load unpacked” developer flow until a signed store package is produced. The landing page explains that flow.
-- Chromium’s File System Access API is required, so Firefox and Safari are not supported in v1. Folder access may need a user click to reconnect after browser restarts; this is a browser security requirement.
-- No real payment was attempted in this build. Return capture, verification response handling, cache behavior, and paste restore were tested with an intercepted API response.
+## Build and verification commands
+
+```bash
+npm ci
+npm run typecheck
+npm test
+npm run build
+npm run test:claims -- --grep @claim:demo-sandbox
+```
+
+Use the `test` command listed on each entry in `.factory/claims.json` to run one public claim. The clean production outputs are:
+
+- `dist/site/` — static deployment root
+- `dist/extension/chrome-mv3/` — unpacked Chrome MV3 extension
+- `dist/site/downloads/note-rehearsal-router.zip` — linked extension archive
+
+## Honest limitations and next steps
+
+- The billing operator must register or enable the production offer before checkout can accept a purchase. No fake checkout or entitlement was added.
+- No paid transaction was attempted while checkout returned 404. Recorded valid and revoked responses test entitlement behavior; the live invalid-token endpoint was also exercised.
+- Automated File System Access coverage replaces the native OS picker with a browser-owned disposable directory, then runs the installed extension UI and production filesystem code. The native chooser itself still requires a human click.
+- The ZIP is an unpacked Chrome installation until a signed store package is published. Firefox and Safari are not supported because the product uses Chrome’s File System Access API.
