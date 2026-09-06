@@ -122,6 +122,12 @@ export function untriagedNotes(notes: NoteRecord[], state: RouterState): NoteRec
   return notes.filter((note) => !routed.has(note.id));
 }
 
+export function availableNotes(notes: NoteRecord[], state: RouterState, unlimited: boolean): NoteRecord[] {
+  const queue = untriagedNotes(notes, state);
+  if (unlimited) return queue;
+  return queue.slice(0, Math.max(0, FREE_NOTE_LIMIT - state.tickets.length));
+}
+
 export function exportMarkdown(state: RouterState): string {
   const lines = ['# Note Rehearsal Router ledger', '', `Exported: ${new Date().toISOString()}`, ''];
   if (!state.tickets.length) lines.push('No notes routed yet.');

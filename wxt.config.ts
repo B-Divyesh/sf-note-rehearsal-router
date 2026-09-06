@@ -6,7 +6,7 @@ export default defineConfig({
   manifest: {
     name: 'Note Rehearsal Router',
     description: 'Turn local Markdown notes into one deliberate recall, solve, teach, do, or archive action.',
-    version: '1.0.0',
+    version: '1.1.0',
     minimum_chrome_version: '110',
     permissions: ['storage'],
     action: {

@@ -1,37 +1,55 @@
 # Note Rehearsal Router
 
-Note Rehearsal Router is a local-first Chrome extension for self-learners whose Markdown notes have outgrown their attention. It presents one untriaged note at a time and turns a deliberate choice—**recall, solve, teach, do, or archive**—into one ordinary Markdown ticket on disk.
+Note Rehearsal Router is a Chrome extension for self-learners with saved Markdown notes. It shows one untriaged note and asks for one action: recall, solve, teach, do, or archive.
 
-It does not summarize, search semantically, modify source notes, read browser pages, or sync note content to a server.
+The extension writes a separate Markdown ticket under `.rehearsal/`. It does not change the source note or choose the action for you.
 
-Live product page: <https://note-rehearsal-router.sociobot.in>
+Live site: <https://note-rehearsal-router.sociobot.in/>
 
-## How it works
+Sample workspace: <https://note-rehearsal-router.sociobot.in/demo/>
 
-1. Click the extension icon to open the rehearsal desk.
-2. Choose a local folder with Chrome’s folder picker.
-3. Read the current note excerpt and choose one action (or press `1`–`5`).
-4. Router writes a separate ticket into `.rehearsal/` and advances the queue.
+## Try the sample
 
-The extension rescans on open, when its tab regains focus, or when you press `R`/“Rescan.” It stores the chosen filesystem handle and routing ledger in browser extension storage. If Chrome pauses permission after a restart, the reconnect button requests it again from a user gesture.
+Open `/demo/` and choose an action. Four sample notes and one completed route are already loaded. The current note advances and the created Markdown appears below it.
 
-Free routing covers 30 notes and always includes Markdown tickets, undo, and ledger export. The optional US $19 one-time license adds unlimited routing and custom ticket-folder names. Purchases use the Sociobot billing API; no payment provider is embedded here.
+The sample uses `localStorage["demo:note-rehearsal-router:state"]`. **Reset demo** restores the sample. **Start for real** clears that demo key and opens the install section. The sample does not read extension data or local files.
 
-## Requirements
+## Use the extension
 
-- Node.js 20 or newer
-- npm
-- Chrome/Chromium 110 or newer (the File System Access API is required)
+1. Install the unpacked extension in a Chromium browser with the File System Access API.
+2. Open the extension and choose a Markdown folder.
+3. Read the current note and choose one action. Number keys `1`–`5` select the same actions.
+4. Use **Rescan** after adding a Markdown file.
+5. Use **Undo last route** to remove the latest ticket and return its note to the queue.
+6. Use **Export ledger** to download the routing record as Markdown.
+
+The manifest requests browser storage only. It has no host permission or content script, so it cannot read web pages. The free workflow does not upload notes or use a hosted service.
+
+## Price
+
+The free tier routes 30 notes and includes ticket creation, undo, and export. A US $19 one-time license adds unlimited routing and custom ticket folders.
+
+Checkout uses the Sociobot billing API. License verification sends only the token and caches the result for one day. A valid result enables the paid features in extension settings.
+
+Production offer registration is external to this repository. Its public registration metadata is recorded in `/work/.evidence/billing-offer.json` during the factory repair.
+
+## Privacy and removal
+
+The selected folder handle, ledger, preferences, and license state use browser extension storage. **Forget local data** clears that browser-held state. Ticket files already written to the selected folder remain on disk.
+
+See the published [privacy policy](https://note-rehearsal-router.sociobot.in/privacy/) and [terms](https://note-rehearsal-router.sociobot.in/terms/).
 
 ## Develop
 
+Requirements: Node.js 20 or newer and npm.
+
 ```sh
 npm install
-npm run dev          # WXT extension development
-npm run dev:site     # landing site at a local Vite URL
+npm run dev
+npm run dev:site
 ```
 
-Load the development output shown by WXT from `chrome://extensions` with Developer mode enabled.
+WXT prints the development extension path. Load that directory from `chrome://extensions` with Developer mode enabled.
 
 ## Test and build
 
@@ -41,30 +59,37 @@ npm test
 npm run build
 ```
 
-`npm test` runs Vitest domain/filesystem tests, a production build, Playwright responsive tests, axe accessibility checks, and a real packaged-extension launch. Playwright is pinned to 1.58.2 and uses the worker-provided Chromium installation.
+`npm test` runs unit tests, a production build, responsive browser checks, accessibility checks, and the packaged extension. Playwright is pinned to 1.58.2.
 
-`npm run build` (and `npm run build:site`) produces:
+Every public product claim is listed in [`.factory/claims.json`](.factory/claims.json). Run all claim checks with:
+
+```sh
+npm run test:claims
+```
+
+Each registry entry also has a focused command such as:
+
+```sh
+npm run test:claims -- --grep @claim:demo-sandbox
+```
+
+The build creates:
 
 - `dist/extension/chrome-mv3/` — unpacked MV3 extension
-- `dist/site/` — static deploy root (`index.html` is at this root)
-- `dist/site/downloads/note-rehearsal-router.zip` — installable extension archive linked by the site
+- `dist/site/` — static deployment root
+- `dist/site/downloads/note-rehearsal-router.zip` — extension archive linked from the site
 
-Deploy only `dist/site/`. Factory infrastructure handles hosting and product registration; this repository does not change DNS, billing, or deployment infrastructure.
-
-## Privacy and data removal
-
-Notes and filenames are read locally and never transmitted. License verification sends only the pasted license token to `api.sociobot.in`, at most once daily when a cached result exists. There are no analytics or third-party runtime scripts/fonts.
-
-Use “Export” before uninstalling if you want the in-browser ledger. “Forget local data” clears the folder handle, preferences, and ledger; uninstalling clears extension storage. Neither action deletes the Markdown tickets already written to disk. See the published `/privacy/` and `/terms/` pages for details.
+Deploy only `dist/site/`. Factory infrastructure handles hosting and billing registration.
 
 ## Project map
 
-- `entrypoints/` — WXT MV3 background and full-tab extension UI
-- `lib/` — routing, Markdown, filesystem, persistence, and license modules
-- `site/` — static product, privacy, and terms pages
-- `tests/` — Vitest and Playwright coverage
-- `.factory/design.md` — product-specific visual system and asset provenance
-- `.factory/handoff.md` — verification record and release notes
+- `entrypoints/` — extension background and full-tab interface
+- `lib/` — routing, filesystem, storage, license, and sample modules
+- `site/` — landing, demo, legal, and 404 pages
+- `tests/` — unit, browser, accessibility, and claim checks
+- `.factory/design.md` — visual system and asset provenance
+- `.factory/demo.md` — sample isolation contract
+- `.factory/handoff.md` — current verification record
 
 ## License
 

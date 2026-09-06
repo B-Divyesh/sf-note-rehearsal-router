@@ -1,6 +1,6 @@
 {
   "name": "note-rehearsal-router",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "package:extension": "node scripts/package-extension.mjs",
     "build": "npm run build:site",
     "test": "vitest run && npm run build && playwright test",
+    "test:claims": "npm run build && playwright test --project=desktop-chromium tests/e2e/claims.spec.ts",
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
@@ -24,7 +25,7 @@
     "@types/chrome": "0.1.4",
     "@types/node": "22.18.0",
     "@types/wicg-file-system-access": "2023.10.6",
-    "fflate": "0.8.2",
+    "fflate": "0.8.3",
     "jsdom": "26.1.0",
     "sharp-cli": "^6.0.0",
     "typescript": "5.9.2",

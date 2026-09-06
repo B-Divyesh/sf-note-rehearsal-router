@@ -8,17 +8,21 @@ if (returnedLicense) {
   localStorage.setItem(LICENSE_KEY, returnedLicense);
   url.searchParams.delete('license');
   history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
-  const panel = document.querySelector<HTMLElement>('#license-return')!;
+  const panel = document.querySelector<HTMLDialogElement>('#license-return')!;
   const token = document.querySelector<HTMLElement>('#returned-license')!;
   const status = document.querySelector<HTMLElement>('#license-status')!;
-  panel.hidden = false;
+  panel.showModal();
   token.textContent = returnedLicense;
   document.querySelector<HTMLButtonElement>('#copy-license')!.addEventListener('click', async (event) => {
-    await navigator.clipboard.writeText(returnedLicense);
-    (event.currentTarget as HTMLButtonElement).textContent = 'Copied';
+    try {
+      await navigator.clipboard.writeText(returnedLicense);
+      (event.currentTarget as HTMLButtonElement).textContent = 'License copied';
+    } catch {
+      status.textContent = 'Copy failed. Select the token above and copy it manually.';
+    }
   });
   document.querySelector<HTMLButtonElement>('#close-license')!.addEventListener('click', () => {
-    panel.hidden = true;
+    panel.close();
   });
   fetch(`https://api.sociobot.in/api/v1/products/note-rehearsal-router/verify?license=${encodeURIComponent(returnedLicense)}`)
     .then((response) => response.ok ? response.json() : Promise.reject(new Error()))

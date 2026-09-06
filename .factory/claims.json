@@ -1,0 +1,142 @@
+[
+  {
+    "id": "demo-sandbox",
+    "claim": "Try four sample notes in a separate demo that can be reset without changing real data.",
+    "where": "landing first screen, demo banner, README",
+    "test": "npm run test:claims -- --grep @claim:demo-sandbox",
+    "sandbox": "fresh browser storage; seed real-looking keys; enter from the landing action; route, reset, and leave the demo"
+  },
+  {
+    "id": "one-note-advance",
+    "claim": "The router shows one untriaged note and advances after one route.",
+    "where": "landing, demo, README, extension",
+    "test": "npm run test:claims -- --grep @claim:one-note-advance",
+    "sandbox": "fresh demo; route the visible sample; assert one different current note and updated counts"
+  },
+  {
+    "id": "five-ticket-routes",
+    "claim": "Recall, solve, teach, do, and archive each create exactly one actionable ticket.",
+    "where": "landing, demo, README, extension",
+    "test": "npm run test:claims -- --grep @claim:five-ticket-routes",
+    "sandbox": "reset the demo before each route; assert one new ticket, route metadata, and completion field"
+  },
+  {
+    "id": "separate-ticket-source-safe",
+    "claim": "The extension writes a separate ticket under .rehearsal and does not change the source note.",
+    "where": "landing, privacy, README, extension",
+    "test": "npm run test:claims -- --grep @claim:separate-ticket-source-safe",
+    "sandbox": "shipped sample note in a disposable in-memory directory; compare source bytes and created ticket"
+  },
+  {
+    "id": "manual-routing-only",
+    "claim": "The extension waits for the user and does not choose or summarize an action.",
+    "where": "landing, README",
+    "test": "npm run test:claims -- --grep @claim:manual-routing-only",
+    "sandbox": "fresh demo; wait without input and compare state and displayed source excerpt"
+  },
+  {
+    "id": "folder-page-scope",
+    "claim": "The extension scans the chosen folder and has no permission to read web pages.",
+    "where": "landing, privacy, README, extension",
+    "test": "npm run test:claims -- --grep @claim:folder-page-scope",
+    "sandbox": "scan one disposable chosen directory and inspect the packaged MV3 permission boundary"
+  },
+  {
+    "id": "rescan-refresh",
+    "claim": "A later scan adds new Markdown files to the queue.",
+    "where": "README, extension",
+    "test": "npm run test:claims -- --grep @claim:rescan-refresh",
+    "sandbox": "add a second file to the disposable sample directory between two production scans"
+  },
+  {
+    "id": "free-limit",
+    "claim": "The free tier routes 30 notes.",
+    "where": "landing, terms, README, extension",
+    "test": "npm run test:claims -- --grep @claim:free-limit",
+    "sandbox": "31 derived sample notes; assert 30 available before routing and the 31st held after 30 tickets"
+  },
+  {
+    "id": "undo-route",
+    "claim": "Undo restores the last routed note and removes its ledger entry.",
+    "where": "README, extension, demo",
+    "test": "npm run test:claims -- --grep @claim:undo-route",
+    "sandbox": "fresh demo; route one note, undo, and compare note title and ticket counts"
+  },
+  {
+    "id": "ledger-export",
+    "claim": "Ledger export stays available in the free tier.",
+    "where": "landing, privacy, README, extension, demo",
+    "test": "npm run test:claims -- --grep @claim:ledger-export",
+    "sandbox": "fresh demo; route once, download Markdown, and count exported ticket headings"
+  },
+  {
+    "id": "paid-license",
+    "claim": "A US $19 one-time license enables unlimited routing and custom ticket folders.",
+    "where": "landing, terms, README, extension",
+    "test": "npm run test:claims -- --grep @claim:paid-license",
+    "sandbox": "fresh demo plus packaged extension; fixture valid verification; save a custom folder and test the 31st note"
+  },
+  {
+    "id": "license-token-cache",
+    "claim": "License verification sends only the token and reuses a result for one day.",
+    "where": "privacy, README",
+    "test": "npm run test:claims -- --grep @claim:license-token-cache",
+    "sandbox": "packaged extension with a recorded valid response; inspect the request and reload within the cache window"
+  },
+  {
+    "id": "license-revocation",
+    "claim": "A revoked or refunded license disables paid settings.",
+    "where": "terms, extension",
+    "test": "npm run test:claims -- --grep @claim:license-revocation",
+    "sandbox": "packaged extension with a recorded revoked response; assert the notice and locked custom-folder field"
+  },
+  {
+    "id": "checkout-boundary",
+    "claim": "Sociobot / Dodo handles checkout, and the product does not collect card details.",
+    "where": "landing, privacy, terms, README",
+    "test": "npm run test:claims -- --grep @claim:checkout-boundary",
+    "sandbox": "fresh product page; inspect the checkout destination, payment inputs, frames, and loaded resource origins"
+  },
+  {
+    "id": "no-tracking-upload",
+    "claim": "The sample and free workflow do not upload notes or run analytics, advertising, or trackers.",
+    "where": "landing, privacy, README",
+    "test": "npm run test:claims -- --grep @claim:no-tracking-upload",
+    "sandbox": "record every request through route, undo, and reset; allow only the product origin"
+  },
+  {
+    "id": "forget-local-data",
+    "claim": "Forget local data clears browser-held state without deleting ticket files.",
+    "where": "privacy, README, extension",
+    "test": "npm run test:claims -- --grep @claim:forget-local-data",
+    "sandbox": "packaged extension with browser state and an OPFS ticket; reset and inspect both stores"
+  },
+  {
+    "id": "extension-browser-storage",
+    "claim": "The extension keeps its folder handle, ledger, preferences, and license in browser storage.",
+    "where": "privacy, README",
+    "test": "npm run test:claims -- --grep @claim:extension-browser-storage",
+    "sandbox": "fresh packaged extension; store a handle and ledger in its browser origin, then read both before reset"
+  },
+  {
+    "id": "offline-free",
+    "claim": "The packaged free desk opens without a hosted service.",
+    "where": "terms, README",
+    "test": "npm run test:claims -- --grep @claim:offline-free",
+    "sandbox": "fresh packaged extension context; go offline and reload the onboarding desk"
+  },
+  {
+    "id": "keyboard-routes",
+    "claim": "Number keys 1–5 route the current note.",
+    "where": "README, extension, demo",
+    "test": "npm run test:claims -- --grep @claim:keyboard-routes",
+    "sandbox": "fresh demo; press 2 and assert a solve ticket, queue advance, and retained focus"
+  },
+  {
+    "id": "browser-storage",
+    "claim": "The demo ledger remains in its separate browser storage namespace across reloads.",
+    "where": "demo, privacy, README",
+    "test": "npm run test:claims -- --grep @claim:browser-storage",
+    "sandbox": "fresh demo; route, reload, and compare the demo-prefixed state"
+  }
+]

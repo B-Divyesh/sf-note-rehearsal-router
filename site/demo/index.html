@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Try Note Rehearsal Router with four sample Markdown notes in a separate browser sandbox." />
+    <meta name="theme-color" content="#111516" />
+    <link rel="canonical" href="https://note-rehearsal-router.sociobot.in/demo/" />
+    <link rel="icon" href="/icon/route-mark.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://note-rehearsal-router.sociobot.in/demo/" />
+    <meta property="og:title" content="Demo — Note Rehearsal Router" />
+    <meta property="og:description" content="Route realistic sample notes without changing local files." />
+    <meta property="og:image" content="https://note-rehearsal-router.sociobot.in/assets/social-card.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Demo — Note Rehearsal Router" />
+    <meta name="twitter:description" content="Route realistic sample notes without changing local files." />
+    <meta name="twitter:image" content="https://note-rehearsal-router.sociobot.in/assets/social-card.jpg" />
+    <title>Demo — Note Rehearsal Router</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to sample note</a>
+    <aside class="demo-banner" aria-label="Demo controls"><strong>Demo — sample data, nothing is saved</strong><div><button type="button" id="reset-demo">Reset demo</button><a href="/#install" id="start-real">Start for real</a></div></aside>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Note Rehearsal Router home"><img src="/icon/route-mark.svg" width="36" height="36" alt=""><span>Note Rehearsal <strong>Router</strong></span></a>
+      <nav aria-label="Main navigation"><a aria-current="page" href="/demo/">Demo</a><a href="/#how-it-works">How it works</a><a href="/privacy/">Privacy</a><a class="nav-download" href="/#install">Install</a></nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <div class="demo-heading"><div><p class="section-number">Sample folder: Learning notes</p><h1>Try the router with sample notes</h1><p>Choose one action below. The sample advances and shows the Markdown ticket it would create.</p></div><div class="sample-count" id="sample-count" aria-live="polite"></div></div>
+      <div class="demo-grid">
+        <section class="sample-work" aria-labelledby="note-title">
+          <div id="sample-note"></div>
+          <fieldset class="demo-routes"><legend>Choose exactly one action</legend><div id="route-buttons"></div></fieldset>
+        </section>
+        <aside class="sample-ledger" aria-labelledby="ledger-title"><p class="section-number">Sample ledger</p><h2 id="ledger-title">Created tickets</h2><ol id="sample-ledger"></ol><button type="button" class="text-button" id="undo-demo">Undo last route</button><button type="button" class="text-button" id="export-demo">Export sample ledger</button></aside>
+      </div>
+      <section class="ticket-preview" aria-labelledby="ticket-title"><div><p class="section-number">Latest sample output</p><h2 id="ticket-title">Markdown action ticket</h2><p>This preview represents a separate file. The demo does not write to your disk.</p></div><pre tabindex="0" aria-label="Latest sample Markdown ticket"><code id="ticket-output"></code></pre></section>
+    </main>
+    <footer class="site-footer"><a class="brand" href="/"><img src="/icon/route-mark.svg" width="32" height="32" alt=""><span>Note Rehearsal <strong>Router</strong></span></a><p>Routes saved Markdown notes into concrete learning actions.</p><nav aria-label="Footer navigation"><a href="/">Home</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav><p class="build-note">Built by Param Factory · v1.1.0 · Generated hero art</p></footer>
+    <div class="live-region" role="status" aria-live="polite" id="demo-status"></div>
+    <script type="module" src="/demo.ts"></script>
+  </body>
+</html>

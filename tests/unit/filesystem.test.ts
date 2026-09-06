@@ -76,4 +76,47 @@ describe('local filesystem workflow', () => {
     expect(folder.written.values().next().value).toContain('type: recall');
     expect(root.entriesMap.get('idea.md')).toBeInstanceOf(MockFileHandle);
   });
+
+  it('keeps an empty Markdown note recoverable and skips files above 2 MB', async () => {
+    const root = new MockDirectoryHandle('notes');
+    root.entriesMap.set('empty.md', new MockFileHandle('empty.md', '', 2));
+    root.entriesMap.set('too-large.md', new MockFileHandle('too-large.md', 'x'.repeat(2_000_001), 3));
+    const notes = await scanMarkdown(root as unknown as FileSystemDirectoryHandle, '.rehearsal');
+    expect(notes).toHaveLength(1);
+    expect(notes[0]).toMatchObject({ name: 'empty.md', excerpt: 'This note has no readable text yet.' });
+  });
+
+  it('adds a numeric suffix instead of overwriting an existing ticket', async () => {
+    const root = new MockDirectoryHandle('notes');
+    root.entriesMap.set('idea.md', new MockFileHandle('idea.md', '# Useful idea'));
+    const [note] = await scanMarkdown(root as unknown as FileSystemDirectoryHandle, '.rehearsal');
+    const ticket = createTicket(note, 'recall', new Date('2026-09-06T00:00:00Z'));
+    const first = await writeTicket(root as unknown as FileSystemDirectoryHandle, '.rehearsal', ticket);
+    const second = await writeTicket(root as unknown as FileSystemDirectoryHandle, '.rehearsal', ticket);
+    expect(first).toBe('.rehearsal/2026-09-06-recall-useful-idea.md');
+    expect(second).toBe('.rehearsal/2026-09-06-recall-useful-idea-2.md');
+    expect((root.entriesMap.get('.rehearsal') as MockDirectoryHandle).written.size).toBe(2);
+  });
+
+  it('aborts and reports a failed write', async () => {
+    let aborted = false;
+    const failingFolder = {
+      async getFileHandle(_name: string, options?: { create?: boolean }) {
+        if (!options?.create) throw new DOMException('Missing', 'NotFoundError');
+        return {
+          async createWritable() {
+            return {
+              async write() { throw new Error('disk full'); },
+              async close() {},
+              async abort() { aborted = true; }
+            };
+          }
+        };
+      }
+    };
+    const root = { async getDirectoryHandle() { return failingFolder; } };
+    const ticket = createTicket({ id: 'note-1', path: 'idea.md', name: 'idea.md', title: 'Useful idea', excerpt: '', body: '# Useful idea', lastModified: 1, size: 13 }, 'do');
+    await expect(writeTicket(root as unknown as FileSystemDirectoryHandle, '.rehearsal', ticket)).rejects.toThrow('disk full');
+    expect(aborted).toBe(true);
+  });
 });

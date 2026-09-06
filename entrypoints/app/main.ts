@@ -1,7 +1,7 @@
 import './style.css';
 import { chooseNotesDirectory, hasDirectoryPermission, removeTicket, scanMarkdown, writeTicket } from '../../lib/filesystem';
 import { CHECKOUT_URL, captureLicenseFromUrl, clearLicense, restoreLicense, verifyLicense } from '../../lib/license';
-import { createTicket, DEFAULT_TICKET_FOLDER, exportMarkdown, FREE_NOTE_LIMIT, ROUTE_DEFINITIONS, untriagedNotes } from '../../lib/router';
+import { availableNotes, createTicket, DEFAULT_TICKET_FOLDER, exportMarkdown, ROUTE_DEFINITIONS, untriagedNotes } from '../../lib/router';
 import { clearLocalData, loadDirectoryHandle, loadState, saveDirectoryHandle, saveState } from '../../lib/storage';
 import type { NoteRecord, RouteId, RouterState } from '../../lib/types';
 
@@ -25,9 +25,7 @@ function escapeHtml(value: string): string {
 }
 
 function currentQueue(): NoteRecord[] {
-  const queue = untriagedNotes(notes, state);
-  const remainingFreeRoutes = Math.max(0, FREE_NOTE_LIMIT - state.tickets.length);
-  return unlocked ? queue : queue.slice(0, remainingFreeRoutes);
+  return availableNotes(notes, state, unlocked);
 }
 
 function routeButtons(): string {
@@ -64,6 +62,7 @@ function mainContent(): string {
       <h2>Choose a Markdown folder</h2>
       <p>We’ll read <code>.md</code> files and write new action tickets into <code>.rehearsal/</code>. Source notes are never changed.</p>
       <button class="button button--primary" type="button" data-action="choose-folder">Choose notes folder</button>
+      <a class="button button--quiet" href="https://note-rehearsal-router.sociobot.in/demo/" target="_blank" rel="noreferrer">Try it with sample data</a>
       <p class="microcopy">Chrome will ask for read and write access. The extension has no permission to read websites.</p>
     </section>`;
   if (view === 'permission') return `
@@ -76,8 +75,8 @@ function mainContent(): string {
     </section>`;
   if (view === 'error') return `
     <section class="state state--error" role="alert">
-      <p class="eyebrow">Route held safely</p>
-      <h2>We couldn’t update the local queue</h2>
+        <p class="eyebrow">Ticket not created</p>
+        <h2>The local queue could not update</h2>
       <p>${escapeHtml(errorMessage)}</p>
       <button class="button button--primary" type="button" data-action="retry">Try again</button>
       <button class="button button--quiet" type="button" data-action="choose-folder">Choose another folder</button>
@@ -139,17 +138,17 @@ function render(): void {
         ${mainContent()}
         <aside class="ledger" aria-labelledby="ledger-title">
           <p class="eyebrow">Local ledger</p>
-          <h2 id="ledger-title">Today’s paths</h2>
+          <h2 id="ledger-title">Recent tickets</h2>
           ${state.tickets.length ? `<ol class="ticket-list">${state.tickets.slice(-5).reverse().map((ticket) => `<li><span class="ticket-dot ticket-dot--${ticket.route}"></span><div><strong>${escapeHtml(ticket.noteTitle)}</strong><small>${ticket.route} · ${new Date(ticket.createdAt).toLocaleDateString()}</small></div></li>`).join('')}</ol>` : '<p class="ledger-empty">Your first route will appear here.</p>'}
           ${lastTicket ? `<button class="undo" type="button" data-action="undo">↶ Undo last route</button>` : ''}
           <div class="privacy-stamp"><span aria-hidden="true">◉</span><p><strong>Local by design</strong><br>Files never leave this device.</p></div>
         </aside>
       </div>
-      <section class="settings" id="settings" hidden aria-labelledby="settings-title">
+      <section class="settings" id="settings" role="dialog" aria-modal="true" hidden aria-labelledby="settings-title">
         <div class="settings__header"><div><p class="eyebrow">Preferences & license</p><h2 id="settings-title">Desk settings</h2></div><button class="close-button" type="button" data-action="toggle-settings" aria-label="Close settings">×</button></div>
         <div class="settings-grid">
           <div><h3>Ticket folder</h3><label for="ticket-folder">Folder inside your notes</label><div class="input-row"><input id="ticket-folder" value="${escapeHtml(state.ticketFolder)}" ${!unlocked ? 'disabled' : ''}><button class="button button--small" type="button" data-action="save-folder" ${!unlocked ? 'disabled' : ''}>Save</button></div><p>${unlocked ? 'New tickets use this folder. Existing files stay where they are.' : 'Custom folder names are included in the lifetime unlock. Free tickets use .rehearsal.'}</p></div>
-          <div><h3>${unlocked ? 'Lifetime unlocked' : 'Unlimited routing'}</h3><p>${unlocked ? escapeHtml(licenseNotice) : 'Free routes 30 notes and includes local Markdown tickets plus export. Pay $19 once for unlimited notes and custom ticket folders.'}</p>${unlocked ? '<button class="text-button" type="button" data-action="remove-license">Remove license from this device</button>' : `<a class="button button--primary button--small" href="${CHECKOUT_URL}" target="_blank" rel="noreferrer">Buy lifetime unlock — $19</a><label for="license-token">Have a license? Paste it</label><div class="input-row"><input id="license-token" autocomplete="off" spellcheck="false"><button class="button button--small" type="button" data-action="restore-license">Verify</button></div>`}</div>
+          <div><h3>${unlocked ? 'Lifetime unlocked' : 'Unlimited routing'}</h3>${!unlocked && licenseNotice ? `<p class="license-notice" role="status">${escapeHtml(licenseNotice)}. Paste another license or use the purchase link.</p>` : ''}<p>${unlocked ? escapeHtml(licenseNotice) : 'Free routes 30 notes and includes local Markdown tickets plus export. Pay $19 once for unlimited notes and custom ticket folders.'}</p>${unlocked ? '<button class="text-button" type="button" data-action="remove-license">Remove license from this device</button>' : `<a class="button button--primary button--small" href="${CHECKOUT_URL}" target="_blank" rel="noreferrer">Buy lifetime unlock — $19</a><label for="license-token">Have a license? Paste it</label><div class="input-row"><input id="license-token" autocomplete="off" spellcheck="false"><button class="button button--small" type="button" data-action="restore-license">Verify</button></div>`}</div>
           <div><h3>Take your data</h3><p>Export the routing ledger at any time. Ticket files already live in your chosen folder.</p><button class="button button--small" type="button" data-action="export">Export ledger</button></div>
           <div><h3>Reset this extension</h3><p>Forget the folder and local ledger. Ticket files on disk are not deleted.</p><button class="text-button text-button--danger" type="button" data-action="reset">Forget local data</button></div>
         </div>
@@ -261,6 +260,7 @@ function toggleSettings(): void {
   if (!section || !toggle) return;
   section.hidden = !section.hidden;
   toggle.setAttribute('aria-expanded', String(!section.hidden));
+  for (const element of document.querySelectorAll<HTMLElement>('.topbar, .intro, .desk-grid')) element.inert = !section.hidden;
   if (!section.hidden) section.querySelector<HTMLElement>('button, input, a')?.focus();
   else toggle.focus();
 }
@@ -304,6 +304,7 @@ function bindEvents(): void {
       notes = [];
       state = { version: 1, tickets: [], ticketFolder: DEFAULT_TICKET_FOLDER };
       view = 'onboarding';
+      announcement = 'Local browser data cleared. Ticket files on disk were not changed.';
       render();
     }
   }));
@@ -318,7 +319,20 @@ document.addEventListener('keydown', (event) => {
   }
   if (event.key.toLowerCase() === 'r' && directory) void refresh(false);
   if (event.key.toLowerCase() === 'e') download('note-rehearsal-ledger.md', exportMarkdown(state), 'text/markdown');
-  if (event.key === 'Escape' && !document.querySelector<HTMLElement>('#settings')?.hidden) toggleSettings();
+  const settings = document.querySelector<HTMLElement>('#settings');
+  if (event.key === 'Escape' && settings && !settings.hidden) toggleSettings();
+  if (event.key === 'Tab' && settings && !settings.hidden) {
+    const focusable = [...settings.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), a[href]')];
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  }
 });
 
 async function initialize(): Promise<void> {

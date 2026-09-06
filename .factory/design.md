@@ -56,4 +56,4 @@ The hero is an original generated still: an abstract overhead paper-routing mach
 - Date: 2026-08-28.
 - License/provenance: generated originally for Note Rehearsal Router; no third-party source assets or recognizable people/brands.
 - Review criteria: no pseudo-text, unintended icons, seams, impossible connections, brand marks, or palette drift. Source candidate and prompt sidecar live in `assets/src/`; optimized WebP/AVIF outputs ship locally.
-
+- `site/public/assets/social-card.jpg` is a 1200×630 center crop of the original generated routing field. `site/public/icon/apple-touch-icon.png` is derived from the hand-authored route icon. No additional source art was introduced.
